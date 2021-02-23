@@ -20,11 +20,12 @@ export class HotObservableSubjectComponent implements OnInit {
   ngOnInit(): void {
     this.myObservable = new Observable((observer: Observer<number>) => {
       let i = 0;
-      setInterval(() => {
+      const interval = setInterval(() => {
         i++;
         this.counter = i;
-        i === 100 ? observer.complete() : observer.next(i);
-      }, 500);
+        i > 100 ? observer.complete() : observer.next(i);
+      }, 200);
+      return () => clearInterval(interval);
     });
     this.usingSubjects();
   }
@@ -46,7 +47,7 @@ export class HotObservableSubjectComponent implements OnInit {
       this.number2 = n;
       this.string2 = 'OK';
       clearTimeout(timer2);
-    }), 5000);
+    }), 4000);
   }
 
 }
