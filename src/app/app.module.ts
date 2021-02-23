@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { BasicComponent } from './basic/basic.component';
 import { ColdObservablesComponent } from './cold-observables/cold-observables.component';
 import { HotObservablesComponent } from './hot-observables/hot-observables.component';
+import { HotObservableSubjectComponent } from './hot-observable-subject/hot-observable-subject.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BasicComponent,
     ColdObservablesComponent,
-    HotObservablesComponent
+    HotObservablesComponent,
+    HotObservableSubjectComponent
   ],
   imports: [
     BrowserModule,
