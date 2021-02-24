@@ -1,0 +1,7 @@
+.box {
+  width: 240px;
+  min-height: 144px;
+  border: 1px blueviolet solid;
+  padding: 16px;
+  margin: 8px;
+}

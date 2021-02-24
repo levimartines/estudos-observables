@@ -1,0 +1,9 @@
+<div class="box">
+  <h4>{{name}}</h4>
+  <button (click)="status ? disconnect() : connect()">{{status ? 'Disconnect' : 'Connect'}}</button>
+  <br>
+  <hr>
+  <div>
+    <p *ngFor="let l of log">{{l}}</p>
+  </div>
+</div>
