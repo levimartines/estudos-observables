@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectableObservable, Observable, Observer, Subject } from 'rxjs';
-import { publish } from 'rxjs/operators';
+import { publish, share } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hot-observable-subject',
@@ -29,7 +29,27 @@ export class HotObservableSubjectComponent implements OnInit {
       return () => clearInterval(interval);
     });
     // this.usingSubjects();
-    this.usingPublish();
+    // this.usingPublish();
+    this.usingShare();
+  }
+
+  usingShare(): void {
+    // funcionamento igual ao do publish com refCount, porém, após o complete do Observable,
+    // caso alguém se inscreva novamente, ele volta a gerar valores ( no publish ele não retorna nada )
+
+    const multiCasted = this.myObservable?.pipe(share());
+
+    const timer1 = setTimeout(() => multiCasted?.subscribe(n => {
+      this.number1 = n;
+      this.string1 = 'OK';
+      clearTimeout(timer1);
+    }), 2000);
+
+    const timer2 = setTimeout(() => multiCasted?.subscribe(n => {
+      this.number2 = n;
+      this.string2 = 'OK';
+      clearTimeout(timer2);
+    }), 4000);
   }
 
   usingPublish(): void {
