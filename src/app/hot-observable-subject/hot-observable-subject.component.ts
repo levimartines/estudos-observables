@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Observer, Subject } from 'rxjs';
+import { ConnectableObservable, Observable, Observer, Subject } from 'rxjs';
+import { publish } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hot-observable-subject',
@@ -10,8 +11,8 @@ export class HotObservableSubjectComponent implements OnInit {
   counter = 0;
   number1 = 0;
   number2 = 0;
-  string1 = 'Initialized';
-  string2 = 'Wait for button click';
+  string1 = 'Waiting for interval...';
+  string2 = 'Waiting for interval...';
   myObservable?: Observable<number>;
 
   constructor() {
@@ -27,7 +28,29 @@ export class HotObservableSubjectComponent implements OnInit {
       }, 200);
       return () => clearInterval(interval);
     });
-    this.usingSubjects();
+    // this.usingSubjects();
+    this.usingPublish();
+  }
+
+  usingPublish(): void {
+    // referencia o observable, e o contador só é iniciado quando alguém se inscreve
+    // const multiCasted = this.myObservable?.pipe(publish(), refCount());
+
+    const multiCasted: ConnectableObservable<number> = this.myObservable?.pipe(publish()) as ConnectableObservable<number>;
+    // explicitamente se conecta ao Observable, que então inicia o contador
+    multiCasted.connect();
+
+    const timer1 = setTimeout(() => multiCasted?.subscribe(n => {
+      this.number1 = n;
+      this.string1 = 'OK';
+      clearTimeout(timer1);
+    }), 2000);
+
+    const timer2 = setTimeout(() => multiCasted?.subscribe(n => {
+      this.number2 = n;
+      this.string2 = 'OK';
+      clearTimeout(timer2);
+    }), 4000);
   }
 
   usingSubjects(): void {
